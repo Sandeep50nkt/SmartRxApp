@@ -18,7 +18,7 @@ public class Drug
     public string Manufacturer { get; set; } = string.Empty;
     public List<string> Ingredients { get; set; } = new();
 
-    [NotMapped] // <-- add here
+    [NotMapped]
     public string IngredientsCsv
     {
         get => Ingredients != null ? string.Join(", ", Ingredients) : "";

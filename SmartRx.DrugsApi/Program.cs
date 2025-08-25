@@ -110,7 +110,6 @@ app.MapDelete("/api/drugs/{id:int}", [Authorize(Roles = "Admin")] async (int id,
     return Results.NoContent();
 });
 
-// Search drugs (user/admin must be logged in)
 app.MapGet("/api/drugs/search", [Authorize] async (string? query, SmartRxDbContext db) =>
 {
     Console.WriteLine("🔎 Incoming query: " + (query ?? "<null>"));
@@ -133,18 +132,13 @@ app.MapGet("/api/drugs/search", [Authorize] async (string? query, SmartRxDbConte
 
     Console.WriteLine($"DB returned {results.Count} drugs before filtering Ingredients/Expiry.");
 
-   
+
 
     Console.WriteLine($"Final result count = {results.Count}");
 
     return Results.Ok(results);
 });
 
-
-
-
-
-// Get full details of a drug (logged-in users)
 app.MapGet("/api/drugs/{id:int}/details", [Authorize] async (int id, SmartRxDbContext db) =>
 {
     var d = await db.Drugs.AsNoTracking().FirstOrDefaultAsync(drug => drug.Id == id);

@@ -7,7 +7,7 @@ namespace SmartRx.Data;
 
 public class SmartRxDbContext : DbContext
 {
-    public SmartRxDbContext(DbContextOptions<SmartRxDbContext> options) : base(options) {}
+    public SmartRxDbContext(DbContextOptions<SmartRxDbContext> options) : base(options) { }
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Drug> Drugs => Set<Drug>();

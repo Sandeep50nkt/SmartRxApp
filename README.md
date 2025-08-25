@@ -1,7 +1,7 @@
 # SmartRx (.NET 9)
 
 ## Run order
-Open three terminals (or configure multiple startup projects in Rider/VS Code):
+Open three terminals (or configure multiple startup projects in VS Code):
 
 ```bash
 cd SmartRx.AuthApi && dotnet run     # http://localhost:5001
@@ -10,8 +10,10 @@ cd SmartRx.Web && dotnet run         # http://localhost:5000
 ```
 
 ## Swagger
+```bash
 http://localhost:5001/swagger
 http://localhost:5002/swagger
+```
 
 ## First time
 Register an admin via Auth API:

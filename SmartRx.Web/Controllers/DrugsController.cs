@@ -84,27 +84,27 @@ public class DrugsController : Controller
     }
 
     [HttpGet]
-public async Task<IActionResult> Search(string? query)
-{
-    var client = CreateClient();
-
-    // Always fetch all drugs for the All Drugs tab
-    var allDrugs = await client.GetFromJsonAsync<List<Drug>>("http://localhost:5002/api/drugs");
-
-    // Fetch search results if query is provided
-    List<Drug>? searchResults = null;
-    if (!string.IsNullOrWhiteSpace(query))
+    public async Task<IActionResult> Search(string? query)
     {
-        searchResults = await client.GetFromJsonAsync<List<Drug>>(
-            $"http://localhost:5002/api/drugs/search?query={Uri.EscapeDataString(query)}"
-        );
+        var client = CreateClient();
+
+        // Always fetch all drugs for the All Drugs tab
+        var allDrugs = await client.GetFromJsonAsync<List<Drug>>("http://localhost:5002/api/drugs");
+
+        // Fetch search results if query is provided
+        List<Drug>? searchResults = null;
+        if (!string.IsNullOrWhiteSpace(query))
+        {
+            searchResults = await client.GetFromJsonAsync<List<Drug>>(
+                $"http://localhost:5002/api/drugs/search?query={Uri.EscapeDataString(query)}"
+            );
+        }
+
+        ViewData["SearchResults"] = searchResults ?? new List<Drug>();
+        ViewData["ActiveTab"] = "search";
+
+        return View("Index", allDrugs);
     }
-
-    ViewData["SearchResults"] = searchResults ?? new List<Drug>();
-    ViewData["ActiveTab"] = "search";
-
-    return View("Index", allDrugs);
-}
 
 
     // 🔹 Helper: attach JWT if logged in

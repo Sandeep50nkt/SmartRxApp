@@ -16,30 +16,30 @@ public class AccountController : Controller
     public IActionResult Login() => View();
 
     [HttpPost]
-public async Task<IActionResult> Login(LoginRequest req)
-{
-    var res = await _http.CreateClient("auth").PostAsJsonAsync("http://localhost:5001/api/auth/login", req);
-    if (!res.IsSuccessStatusCode) { ViewBag.Error="Invalid credentials"; return View(req); }
+    public async Task<IActionResult> Login(LoginRequest req)
+    {
+        var res = await _http.CreateClient("auth").PostAsJsonAsync("http://localhost:5001/api/auth/login", req);
+        if (!res.IsSuccessStatusCode) { ViewBag.Error = "Invalid credentials"; return View(req); }
 
-    var login = await res.Content.ReadFromJsonAsync<LoginResponse>();
-    HttpContext.Session.SetString(SessionKeys.Jwt, login!.Token);
-    HttpContext.Session.SetString(SessionKeys.Role, login.Role);
-    HttpContext.Session.SetString(SessionKeys.User, login.Username);
+        var login = await res.Content.ReadFromJsonAsync<LoginResponse>();
+        HttpContext.Session.SetString(SessionKeys.Jwt, login!.Token);
+        HttpContext.Session.SetString(SessionKeys.Role, login.Role);
+        HttpContext.Session.SetString(SessionKeys.User, login.Username);
 
-    var claims = new List<Claim> {
+        var claims = new List<Claim> {
         new Claim(ClaimTypes.Name, login.Username),
         new Claim(ClaimTypes.Role, login.Role)
     };
-    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-    return RedirectToAction("Index", "Drugs");
-}
+        return RedirectToAction("Index", "Drugs");
+    }
 
-public async Task<IActionResult> Logout()
-{
-    HttpContext.Session.Clear();
-    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return RedirectToAction("Login");
-}
+    public async Task<IActionResult> Logout()
+    {
+        HttpContext.Session.Clear();
+        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        return RedirectToAction("Login");
+    }
 }
