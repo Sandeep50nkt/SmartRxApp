@@ -1,0 +1,62 @@
+# Build results
+bin/
+obj/
+out/
+Debug/
+Release/
+
+# Visual Studio
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# JetBrains Rider
+.idea/
+*.iml
+
+# ASP.NET / .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+# Entity Framework
+Migrations/
+
+# Logs
+*.log
+logs/
+
+# Database
+*.mdf
+*.ldf
+*.sqlite
+*.db
+App_Data/
+smartrx.db
+
+# User secrets (keep appsettings.json but ignore dev config)
+appsettings.Development.json
+
+# OS generated
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Packaging
+*.nupkg
+*.snupkg
+*.tar.gz
+
+# Others
+_ReSharper*/
+*.bak
+*.swp

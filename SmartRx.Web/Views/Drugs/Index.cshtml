@@ -1,0 +1,102 @@
+@{
+    var activeTab = ViewData["ActiveTab"] as string ?? "all";
+    var searchResults = ViewData["SearchResults"] as List<SmartRx.Domain.Drug> ?? new List<SmartRx.Domain.Drug>();
+    var isAdmin = User.IsInRole("Admin");
+}
+
+<ul class="nav nav-tabs" id="drugTabs" role="tablist">
+    <li class="nav-item">
+        <button class="nav-link @(activeTab=="all" ? "active" : "")" data-bs-toggle="tab" data-bs-target="#allDrugs">All Drugs</button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link @(activeTab=="search" ? "active" : "")" data-bs-toggle="tab" data-bs-target="#searchDrugs">Search</button>
+    </li>
+</ul>
+
+<div class="tab-content mt-3">
+    <div class="tab-pane fade @(activeTab=="all" ? "show active" : "")" id="allDrugs">
+        @* Only show Create button for Admin *@
+        @if (isAdmin)
+        {
+            <p>
+                <a asp-action="Create" class="btn btn-success">Create New</a>
+            </p>
+        }
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Brand Name</th>
+                    <th>Manufacturer</th>
+                    <th>Ingredients</th>
+                    <th>Price</th>
+                    @if (isAdmin)
+                    {
+                        <th>Actions</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var drug in Model)
+            {
+                <tr>
+                    <td>@drug.BrandName</td>
+                    <td>@drug.Manufacturer</td>
+                    <td>@string.Join(", ", drug.Ingredients)</td>
+                    <td>@drug.Price.ToString("C")</td>
+                    @if (isAdmin)
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@drug.Id" class="btn btn-primary btn-sm">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@drug.Id" method="post" style="display:inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tab-pane fade @(activeTab=="search" ? "show active" : "")" id="searchDrugs">
+        <form method="get" asp-action="Search">
+            <div class="mb-3">
+                <input type="text" name="query" class="form-control" placeholder="Search..." value="@(Context.Request.Query["query"])" />
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        @if (searchResults.Count > 0)
+        {
+            <table class="table table-striped mt-3">
+                <thead>
+                    <tr>
+                        <th>Brand Name</th>
+                        <th>Manufacturer</th>
+                        <th>Ingredients</th>
+                        <th>Expiry</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var drug in searchResults)
+                    {
+                        <tr>
+                            <td>@drug.BrandName</td>
+                            <td>@drug.Manufacturer</td>
+                            <td>@string.Join(", ", drug.Ingredients)</td>
+                            <td>@drug.ExpiryDate.ToShortDateString()</td>
+                            <td>@drug.Price.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else if (!string.IsNullOrWhiteSpace(Context.Request.Query["query"]))
+        {
+            <p class="mt-3 text-muted">No results found.</p>
+        }
+    </div>
+</div>

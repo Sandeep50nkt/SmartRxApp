@@ -1,0 +1,65 @@
+@model SmartRx.Domain.Drug
+
+@{
+    ViewData["Title"] = "Edit Drug";
+}
+
+<h2>Edit Drug</h2>
+
+<form asp-action="Edit" method="post" id="drugForm">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="BrandName"></label>
+        <input asp-for="BrandName" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Manufacturer"></label>
+        <input asp-for="Manufacturer" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="IngredientsCsv">Ingredients (comma-separated)</label>
+        <input asp-for="IngredientsCsv" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DosageInstruction"></label>
+        <input asp-for="DosageInstruction" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" required />
+    </div>
+
+    <button type="submit" id="submitBtn" class="btn btn-primary" disabled>Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <script>
+        const form = document.getElementById("drugForm");
+        const inputs = form.querySelectorAll("input[required]");
+        const submitBtn = document.getElementById("submitBtn");
+
+        function checkForm() {
+            let allFilled = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                }
+            });
+            submitBtn.disabled = !allFilled;
+        }
+
+        // Run check on input events
+        inputs.forEach(input => {
+            input.addEventListener("input", checkForm);
+        });
+
+        // Initial check
+        checkForm();
+    </script>
+}

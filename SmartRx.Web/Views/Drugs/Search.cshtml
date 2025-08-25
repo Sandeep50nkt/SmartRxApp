@@ -1,0 +1,41 @@
+@model IEnumerable<SmartRx.Domain.Drug>
+
+<h2>Search Drugs</h2>
+
+<form method="get" asp-action="Search" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="query" value="@ViewBag.Query" class="form-control" placeholder="Search by brand, manufacturer, ingredient, expiry..." />
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+@if (!Model.Any())
+{
+    <p>No drugs found.</p>
+}
+else
+{
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Manufacturer</th>
+                <th>Ingredients</th>
+                <th>Expiry</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var drug in Model)
+        {
+            <tr>
+                <td>@drug.BrandName</td>
+                <td>@drug.Manufacturer</td>
+                <td>@string.Join(", ", drug.Ingredients)</td>
+                <td>@drug.ExpiryDate.ToShortDateString()</td>
+                <td>@drug.Price.ToString("C")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

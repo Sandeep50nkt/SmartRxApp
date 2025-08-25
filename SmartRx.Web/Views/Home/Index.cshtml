@@ -1,0 +1,10 @@
+<h1>SmartRx</h1>
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <p>Welcome! You can view <a href="/Drugs">drugs</a>.</p>
+}
+else
+{
+    <p>Welcome! Please <a href="/Account/Login">login</a>.</p>
+}
